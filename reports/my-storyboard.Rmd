@@ -44,6 +44,7 @@ respostas %>%
 
 ufcg <- respostas %>% filter(IES == "UFCG") %>%  group_by(categoria) %>% summarise(m = mean(media))
 ufrj <- respostas %>% filter(IES == "UFRJ") %>%  group_by(categoria) %>% summarise(m = mean(media))
+
 p <- plot_ly(
     type = 'scatterpolar',
     fill = 'toself'
@@ -69,32 +70,20 @@ p <- plot_ly(
 
 # Create a shareable link to your chart
 # Set up API credentials: https://plot.ly/r/getting-started
+
 ggplotly(p)
 ```
 
-
-```{r}
-p <- respostas %>%
-    filter(UF == "PB") %>% 
-  plot_ly(
-    x = ~media, 
-    y = ~tema, 
-    text = ~ IES,
-    frame = ~UF,
-    type = 'scatter'
-  )
-
-# Create a shareable link to your chart
-# Set up API credentials: https://plot.ly/r/getting-started
-ggplotly(p)
-```
 
 
 ***
 
-Essa é a primeira parte da história. O texto aqui do lado pode ser longo e tal e tal. 
+A UFRJ é a universidade mais bem avaliada do Brasil, segundo site1 e site2.
+Nos dados coletados, para as categorias apresentadas, Curso em Geral, Infraestrutura, Aprendizagem além do técnico, Ensino apoio e avaliação e Outros, suas médias são 4.46, 4.10, 4.16, 4.0 e 4.8 respectivamente. 
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+
+
+Resolvemos comparar uma das melhores universidades do país com a nossa, a UFCG. Ignorando a categoria `Outros`, pois a UFCG não tem perguntas que se encaixem na mesma, podemos observar que ela só se aproxima da UFRJ na categoria de Infraestrutura, o que faz sentido, já que estamos na 15a colocação do Brasil. 
 
 ### Parte 2
 
