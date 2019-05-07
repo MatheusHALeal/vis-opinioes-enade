@@ -8,9 +8,7 @@ output:
 ```{r setup, include=FALSE}
 library(flexdashboard)
 library(tidyverse)
-library(viridis)
 library(plotly)
-library(gapminder)
 packageVersion('plotly')
 theme_set(theme_bw())
 
@@ -33,11 +31,60 @@ criterios = respostas %>%
 ### Parte 1
 
 ```{r}
-respostas %>% 
-    filter(UF == "PB") %>% 
-    ggplot(aes(x = media, y = tema, color = categoria)) + 
-    geom_point()
+r <- respostas %>% group_by(IES, UF, categoria, tema) %>% summarise(media = mean(media)) %>%  filter(categoria != "Outros" & categoria != "Aprendizagem além do técnico" & categoria != "Curso em geral")
+
+p <- r %>%
+  plot_ly(
+    x = ~media, 
+    y = ~tema,
+    color = ~categoria, 
+    frame = ~UF,
+    text = ~IES,
+    hoverinfo = "text",
+    type = 'scatter',
+    mode = 'markers'
+  ) %>%
+  layout(
+    xaxis = list(
+      type = "log"
+    )
+  )
+
+ggplotly(p)
 ```
+
+***
+
+As categorias das questões foram divididas em 4: `Aprendizagem além do técnico`, `Curso em geral`, `Ensino, apoio e avaliacão`, `Infraestrutua` e `Outros`. Além disso, as questões também possuiam temas pertencentes às categorias citadas. Na visualização ao lado podemos ver qual a média das universidade para cada tema de acordo com as respostas. Separamos as universidades pelo seu estado, além disso, nesta primeira podemos observar apenas as categorias `Ensino, apoio e avaliacão` e `Infraestrutua`. Deslize o scroll para escolher qual estado você deseja observar.
+
+
+### Parte 2
+```{r}
+r <- respostas %>% group_by(IES, UF, categoria, tema) %>% summarise(media = mean(media)) %>%  filter(categoria != "Outros" & categoria != "Infraestrutura" & categoria != "Ensino, apoio e avaliacão")
+
+p <- r %>%
+  plot_ly(
+    x = ~media, 
+    y = ~tema,
+    color = ~categoria, 
+    frame = ~UF,
+    text = ~IES,
+    hoverinfo = "text",
+    type = 'scatter',
+    mode = 'markers'
+  ) %>%
+  layout(
+    xaxis = list(
+      type = "log"
+    )
+  )
+
+ggplotly(p)
+```
+
+***
+
+Aqui temos outras duas categorias. Deixamos a categoria `Outros` de fora, pois algumas universidades não possuiam essa informação.
 
 
 ```{r}
