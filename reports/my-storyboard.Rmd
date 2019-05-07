@@ -11,6 +11,7 @@ library(tidyverse)
 library(viridis)
 library(plotly)
 library(gapminder)
+library(gridExtra)
 packageVersion('plotly')
 theme_set(theme_bw())
 
@@ -32,18 +33,14 @@ criterios = respostas %>%
 
 ### Parte 1
 
-```{r}
-respostas %>% 
-    filter(UF == "PB") %>% 
-    ggplot(aes(x = media, y = tema, color = categoria)) + 
-    geom_point()
-```
-
 
 ```{r}
 
 ufcg <- respostas %>% filter(IES == "UFCG") %>%  group_by(categoria) %>% summarise(m = mean(media))
 ufrj <- respostas %>% filter(IES == "UFRJ") %>%  group_by(categoria) %>% summarise(m = mean(media))
+ufmg <- respostas %>% filter(IES == "UFMG") %>%  group_by(categoria) %>% summarise(m = mean(media))
+ufpe <- respostas %>% filter(IES == "UFPE") %>%  group_by(categoria) %>% summarise(m = mean(media))
+ufrgs <- respostas %>% filter(IES == "UFRGS") %>%  group_by(categoria) %>% summarise(m = mean(media))
 
 p <- plot_ly(
     type = 'scatterpolar',
@@ -59,6 +56,21 @@ p <- plot_ly(
     theta = ufrj$categoria,
     name = 'UFRJ'
   ) %>%
+    add_trace(
+    r = ufmg$m,
+    theta = ufmg$categoria,
+    name = 'UFMG'
+  ) %>%
+    add_trace(
+    r = ufpe$m,
+    theta = ufpe$categoria,
+    name = 'UFPE'
+  ) %>%
+    add_trace(
+    r = ufrgs$m,
+    theta = ufrgs$categoria,
+    name = 'UFRGS'
+  ) %>%
   layout(
     polar = list(
       radialaxis = list(
@@ -68,22 +80,36 @@ p <- plot_ly(
     )
   )
 
-# Create a shareable link to your chart
-# Set up API credentials: https://plot.ly/r/getting-started
 
 ggplotly(p)
+
+
 ```
 
 
 
 ***
 
-A UFRJ é a universidade mais bem avaliada do Brasil, segundo site1 e site2.
-Nos dados coletados, para as categorias apresentadas, Curso em Geral, Infraestrutura, Aprendizagem além do técnico, Ensino apoio e avaliação e Outros, suas médias são 4.46, 4.10, 4.16, 4.0 e 4.8 respectivamente. 
+Para uma melhor visualização é recomendado omitir os resultados de algumas universidade, basta clicar na legenda referente a instituição que deve desaparecer do gráfico e para habilitar novamente, um segundo clique. 
+
+Para elaborar o seguinte texto consideramos comparações entre dois cursos, sempre o da UFCG com o de outra universidades. Selecionamos através de pesquisas quais os 4 curso de Ciência da Computação mais bem avaliados.
+
+* A UFRJ é a universidade mais bem avaliada do Brasil, segundo site1 e site2.
+Nos dados coletados para as categorias apresentadas, Curso em Geral, Infraestrutura, Aprendizagem além do técnico, Ensino apoio e avaliação e Outros, suas médias são 4.46, 4.10, 4.16, 4.0 e 4.8 respectivamente, representadas pelos pontos.
+
+Resolvemos comparar uma das melhores universidades do país com a nossa, a UFCG. Ignorando a categoria `Outros`, pois não temos perguntas que se encaixem na mesma, apesar do título da UFRJ a universidade paraibana possui uma média maior em todas as categorias. 
+
+
+* A UFMG é a segunda federal mais bem colocada, mas a UFCG continua com uma média acima em maioria das categorias, com exceção da Infraestrutura, com a diferença de aproximadamenente 0,5. 
+
+* Também mais bem avaliada na categoria Infraestutura, a UFPE é a quinta no rank de melhores cursos de computação, mas fica abaixo da média da UFCG em todas as outras categorias. 
+
+
+* Na quarta posição geral do rank, a UFRGS tem um resultado similar ao da UFPE. Apesar de estar abaixo de todos os cursos dessas universidades, na 15a, o curso de computação da UFCG tem sua média, dividida em categorias, maiores, com execeção apenas da Infraestrutura. 
 
 
 
-Resolvemos comparar uma das melhores universidades do país com a nossa, a UFCG. Ignorando a categoria `Outros`, pois a UFCG não tem perguntas que se encaixem na mesma, podemos observar que ela só se aproxima da UFRJ na categoria de Infraestrutura, o que faz sentido, já que estamos na 15a colocação do Brasil. 
+
 
 ### Parte 2
 
